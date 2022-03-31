@@ -61,10 +61,31 @@ subf=plt.subplot(1,2,1); plt.imshow(contrast_stretched)
 plt.axis('off'); subf.set_title("Piecewise-Linear tranform")
 
 #%% Histogram equalization
-img = cv2.imread('img/circuit.jpg', cv2.IMREAD_GRAYSCALE)
-equ = cv2.equalizeHist(img)
+i = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+img_gray = cv2.cvtColor(i, cv2.COLOR_BGR2GRAY)
+equ = cv2.equalizeHist(img_gray)
 
 plt.figure(dpi=300)
 subf=plt.subplot(1,2,1); plt.imshow(equ)
 plt.axis('off'); subf.set_title("Piecewise-Linear tranform")
+
+#%% Rotation with bilinear interpolation and nearest interpolation
+
+rolateDegree = 15
+scale = 1.0
+(h, w) = img.shape[:2]
+center = (w / 2, h / 2)
+
+M = cv2.getRotationMatrix2D(center, rolateDegree, scale)
+rotated1 = cv2.warpAffine(img, M, (w, h))
+
+plt.figure(dpi=300)
+subf=plt.subplot(1,2,1); plt.imshow(rotated1)
+plt.axis('off'); subf.set_title("Bilinear Interpolation")
+
+rotated2 = cv2.warpAffine(img, M, (w, h), flags = cv2.INTER_NEAREST)
+
+plt.figure(dpi=300)
+subf=plt.subplot(1,2,1); plt.imshow(rotated2)
+plt.axis('off'); subf.set_title("Nearest Interpolation")
 
