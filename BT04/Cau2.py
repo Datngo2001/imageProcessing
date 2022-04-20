@@ -1,20 +1,27 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Apr  9 09:36:40 2022
+Created on Wed Apr 20 17:04:24 2022
 
 @author: ngomi
 """
+
+
 import cv2 as cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-img = cv2.imread('./images/vantay.jpg', 0)
+img = cv2.imread('./images/cau2.png', 0)
 img = 255 - img
 threshval = 100; n = 255
 retval, imB = cv2.threshold(img, threshval, n, cv2.THRESH_BINARY)
 
 kernel = np.ones((3,3), np.uint8)
-result = cv2.morphologyEx(imB, cv2.MORPH_CLOSE, kernel)
+kernel[0][0] = 1
+kernel[1][1] = 1
+kernel[2][2] = 1
+
+erode = cv2.erode(imB, kernel, iterations = 5)
+result = imB - erode
 
 plt.figure(dpi=300)
 plt.axis('off')
